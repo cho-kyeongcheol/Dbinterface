@@ -6,13 +6,17 @@ import java.util.Random;
 import javax.inject.Inject;
 
 import org.edu.dao.IF_SampleDAO;
+import org.edu.service.IF_SampleService;
+import org.edu.service.SampleServiceImpl;
 import org.edu.vo.MemberVO;
 // import org.edu.dao.SampleSelectProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
+@WebAppConfiguration //JUnit과 AOP동시사용 에러처리를 위해
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations ={"file:src/main/webapp/WEB-INF/spring/**/*.xml"})
 public class SampleMapperTest {
@@ -36,32 +40,38 @@ public class SampleMapperTest {
 	 */
 	
 	// interface 로 Mybatis 쿼리 사용 DI처리(Dependency Injcetion)
+	
+	
 	@Inject
 	private IF_SampleDAO mapper; //인터페이스를 실행가능하게 mapper실행변수로 지정.
 	// 클래스를 실행변수로 사용시 --> IF_SampleMapper mapper = new If_SampleMapper(); 위에 두줄과 같은뜻
 	
+	@Inject
+	private IF_SampleService sampleService;	
+	
 	@Test 
-	public void testInsertMember() {
+	public void testInsertMember() throws Exception {
 		/*int vRandom = 0;
 		Random ran = new Random();
 		vRandom = ran.nextInt();*/
 		java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyyMMddHHmmss");
 		String today= formatter.format(new java.util.Date());
 		testSelectMember();
-		System.out.println("위쪽은 입력 전 리스트 입니다.");
+		//System.out.println("위쪽은 입력 전 리스트 입니다.");
 		MemberVO vo = new MemberVO();
 		vo.setUserid("user" + today);
 		vo.setUserpw("1234");
-		vo.setUsername("각시탈");
+		vo.setUsername("남자 백시몬");
 		vo.setEmail("user13@test.com");
-		mapper.insertMember(vo);
-		System.out.println("아래쪽은 입력 후 리스트 입니다.");
-		testSelectMember();
+		sampleService.insertMember(vo);
+		//System.out.println("아래쪽은 입력 후 리스트 입니다.");
+		//testSelectMember();
 	}
+	
 	@Test
 	public void testSelectMember() {
 		List<MemberVO> list = mapper.selectMember();
-		int cnt = 1;
+		/*int cnt = 1;
 		for(MemberVO vo:list) {
 			System.out.println(
 					"번호: " + cnt++ + "번 " + 					
@@ -70,7 +80,7 @@ public class SampleMapperTest {
 					" 이름 " + vo.getUsername() +
 					" 이메일 " + vo.getEmail() 
 					);
-			}
+			}*/
 		}
 
 	@Test
@@ -85,16 +95,16 @@ public class SampleMapperTest {
 			vo.setEmail("abc@abc.com1");
 			mapper.updateMember(vo);
 			
-			System.out.println("아래는 수정 전 이름을 확인하세요");
-			testSelectMember();
+			//System.out.println("아래는 수정 전 이름을 확인하세요");
+			//testSelectMember();
 	}
 	
 	@Test
 	public void testDeleteMember() {
-		testSelectMember();
+		//testSelectMember();
 		mapper.deleteMember("user19");
-		System.out.println("아래는 지운 후 회원리스트 입니다.");
-		testSelectMember();
+		//System.out.println("아래는 지운 후 회원리스트 입니다.");
+		//testSelectMember();
 		
 		
 	}

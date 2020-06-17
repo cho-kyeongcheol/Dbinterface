@@ -13,11 +13,14 @@ import org.edu.vo.MemberVO;
  *    생성함.
  */
 public interface IF_SampleDAO {
-	// 회원정보 입력-조회-수정-삭제 메서드 명세
+	
+	// 회원정보 입력-조회-수정-삭제 메서드 명세	
 	public void insertMember(MemberVO vo);
 	public List<MemberVO> selectMember();
 	public void updateMember(MemberVO vo);
 	public void deleteMember(String userid);
+	
+	
 	// 인터페이스에서 dB접속 테스트
 	//@Select("select current_timestamp from member") //Hsql용
 	@Select("select now()") //Mysql용
